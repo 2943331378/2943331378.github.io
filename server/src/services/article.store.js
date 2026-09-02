@@ -65,6 +65,7 @@ async function scanArticles() {
         articles.push({
           slug,
           meta: {
+            slug,
             title: frontmatter.title,
             date: frontmatter.date,
             tags: frontmatter.tags || [],
