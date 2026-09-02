@@ -1,0 +1,241 @@
+/* ===== 文章正文排版（服务端生成的 .prose HTML）===== */
+
+.prose {
+  font-size: 17px;
+  line-height: 1.85;
+  letter-spacing: 0.01em;
+  color: var(--color-text);
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* 段落中文悬挂标点 */
+.prose p {
+  margin: 0 0 1.5em;
+  text-align: justify;
+}
+
+/* 标题 */
+.prose h2,
+.prose h3 {
+  font-family: var(--font-serif);
+  color: var(--color-ink);
+  font-weight: 700;
+  scroll-margin-top: calc(var(--header-h) + 16px);
+}
+
+.prose h2 {
+  font-size: 1.75rem;
+  line-height: 1.4;
+  margin: 2.5em 0 1em;
+  padding-top: 0.35em;
+  position: relative;
+}
+
+/* h2 上方的编辑感短红/蓝竖线 */
+.prose h2::before {
+  content: "";
+  display: block;
+  width: 3.5em;
+  height: 3px;
+  background: var(--color-accent);
+  margin-bottom: 0.55em;
+  border-radius: 2px;
+}
+
+.prose h3 {
+  font-size: 1.375rem;
+  margin: 2em 0 0.8em;
+}
+
+.prose h2 + h3 {
+  margin-top: 1.4em;
+}
+
+.prose h4 {
+  font-size: 1.1rem;
+  color: var(--color-ink);
+  margin: 1.8em 0 0.6em;
+}
+
+/* 行内元素 */
+.prose strong {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+.prose em {
+  color: var(--color-ink);
+}
+
+.prose a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--color-accent) 35%, transparent);
+  text-underline-offset: 3px;
+  transition: text-decoration-color var(--dur) var(--ease);
+}
+
+.prose a:hover {
+  text-decoration-color: var(--color-accent);
+}
+
+/* 引用 */
+.prose blockquote {
+  margin: 1.8em 0;
+  padding: 0.2em 1.2em;
+  border-left: 3px solid var(--color-accent);
+  background: var(--color-accent-soft);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  color: var(--color-text);
+}
+
+.prose blockquote p {
+  margin: 0.6em 0;
+  text-align: left;
+}
+
+/* 列表 */
+.prose ul,
+.prose ol {
+  margin: 0 0 1.5em;
+  padding-left: 1.4em;
+}
+
+.prose ul {
+  list-style: disc;
+}
+
+.prose ol {
+  list-style: decimal;
+}
+
+.prose li {
+  margin-bottom: 0.45em;
+}
+
+.prose li::marker {
+  color: var(--color-accent);
+}
+
+/* 代码：行内 */
+.prose code:not(pre code) {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-code-border);
+  padding: 0.15em 0.4em;
+  border-radius: var(--radius-sm);
+  color: #9a3412;
+  white-space: nowrap;
+}
+
+/* 代码块 */
+.prose pre {
+  margin: 1.8em 0;
+  padding: 18px 22px;
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-code-border);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.prose pre code {
+  font-family: var(--font-mono);
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+  white-space: pre;
+}
+
+/* 代码块语言标签角标 */
+.prose pre.hljs,
+.prose pre > code {
+  position: relative;
+}
+
+.prose pre code.hljs.language-java::before,
+.prose pre code.hljs[class*="language-"]::before {
+  content: attr(class);
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+  color: var(--color-text-faint);
+  margin-bottom: 10px;
+  font-family: var(--font-sans);
+}
+
+/* 表格 */
+.prose table {
+  width: 100%;
+  margin: 1.8em 0;
+  border-collapse: collapse;
+  font-size: 0.95em;
+  overflow-x: auto;
+  display: block;
+}
+
+.prose thead {
+  background: var(--color-code-bg);
+}
+
+.prose th,
+.prose td {
+  border: 1px solid var(--color-border);
+  padding: 0.55em 0.9em;
+  text-align: left;
+  vertical-align: top;
+}
+
+.prose th {
+  font-family: var(--font-serif);
+  color: var(--color-ink);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.prose tr:nth-child(even) td {
+  background: color-mix(in srgb, var(--color-bg) 55%, white);
+}
+
+/* 图片 */
+.prose img {
+  margin: 1.8em auto;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+/* 分隔线 */
+.prose hr {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 2.5em 0;
+}
+
+/* 末段不再有底部空隙 */
+.prose > :last-child {
+  margin-bottom: 0;
+}
+
+/* 移动端 */
+@media (max-width: 640px) {
+  .prose {
+    font-size: 16px;
+    line-height: 1.8;
+  }
+  .prose h2 {
+    font-size: 1.5rem;
+  }
+  .prose pre {
+    margin: 1.4em -8px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    padding: 14px 16px;
+  }
+}

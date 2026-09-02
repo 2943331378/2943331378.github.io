@@ -1,0 +1,51 @@
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: color-mix(in srgb, var(--color-bg) 88%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--header-h);
+}
+
+.logo {
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--color-ink);
+  letter-spacing: 0.02em;
+}
+
+.logo-dot {
+  color: var(--color-accent);
+}
+
+.nav {
+  display: flex;
+  gap: 32px;
+}
+
+.nav-link {
+  font-size: 0.95rem;
+  color: var(--color-text);
+  transition: color var(--dur) var(--ease);
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: var(--color-ink);
+  font-weight: 500;
+}
+
+@media (max-width: 640px) {
+  .nav {
+    gap: 22px;
+  }
+}
