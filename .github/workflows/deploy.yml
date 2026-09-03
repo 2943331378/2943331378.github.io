@@ -12,27 +12,32 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      SSH_HOST: ${{ secrets.SSH_HOST }}
     steps:
       - uses: actions/checkout@v4
 
+      - name: 配置 SSH
+        env:
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "$SSH_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+
       - name: 上传源码到服务器
-        uses: easingthemes/ssh-deploy@v5
-        with:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_KEY }}
-          REMOTE_HOST: ${{ secrets.SSH_HOST }}
-          REMOTE_USER: root
-          ARGS: "-avz --delete"
-          SOURCE: "./"
-          TARGET: "/www/wwwroot/my-blog/"
-          EXCLUDE: "/node_modules/, /client/dist/, /.git/, /.deploy/, /.env"
+        run: |
+          rsync -avz --delete \
+            --exclude 'node_modules' \
+            --exclude 'client/dist' \
+            --exclude '.git' \
+            --exclude '.deploy' \
+            --exclude '.env' \
+            -e "ssh -i ~/.ssh/deploy_key" \
+            ./ "root@$SSH_HOST:/www/wwwroot/my-blog/"
 
       - name: 重建并重启容器
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: root
-          key: ${{ secrets.SSH_KEY }}
-          script: |
-            cd /www/wwwroot/my-blog
-            docker compose up -d --build
-            docker image prune -f
+        run: |
+          ssh -i ~/.ssh/deploy_key "root@$SSH_HOST" \
+            "cd /www/wwwroot/my-blog && docker compose up -d --build && docker image prune -f"
