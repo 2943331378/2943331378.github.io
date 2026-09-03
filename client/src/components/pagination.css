@@ -50,7 +50,7 @@
 
 .page-num.current {
   background: var(--color-accent);
-  color: #fff;
+  color: var(--color-on-accent);
 }
 
 .page-ellipsis {

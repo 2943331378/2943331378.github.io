@@ -5,15 +5,16 @@ const router = Router();
 
 /**
  * 获取文章列表
- * GET /api/articles?page=1&pageSize=9&tag=Java
+ * GET /api/articles?page=1&pageSize=9&tag=Java&q=索引
  */
 router.get("/", async (req, res) => {
   try {
-    const { page, pageSize, tag } = req.query;
+    const { page, pageSize, tag, q } = req.query;
     const params = {
       page: page ? parseInt(page, 10) : 1,
       pageSize: pageSize ? Math.min(parseInt(pageSize, 10), 50) : 9,
       tag: tag || undefined,
+      q: q || undefined,
     };
 
     const data = await getArticles(params);

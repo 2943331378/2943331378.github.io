@@ -126,7 +126,7 @@
   border: 1px solid var(--color-code-border);
   padding: 0.15em 0.4em;
   border-radius: var(--radius-sm);
-  color: #9a3412;
+  color: var(--color-code-inline);
   white-space: nowrap;
 }
 
@@ -171,6 +171,45 @@
   font-family: var(--font-sans);
 }
 
+/* 代码块复制按钮（服务端渲染进 HTML，文章页与写作台预览共用） */
+.prose pre {
+  position: relative;
+}
+
+.code-copy-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  opacity: 0.75;
+  transition: all var(--dur) var(--ease);
+}
+
+.code-copy-btn:hover {
+  opacity: 1;
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.code-copy-btn.is-copied {
+  color: var(--color-on-accent);
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  opacity: 1;
+}
+
+.code-copy-btn.is-failed {
+  color: #b91c1c;
+  border-color: #b91c1c;
+  opacity: 1;
+}
+
 /* 表格 */
 .prose table {
   width: 100%;
@@ -201,7 +240,7 @@
 }
 
 .prose tr:nth-child(even) td {
-  background: color-mix(in srgb, var(--color-bg) 55%, white);
+  background: color-mix(in srgb, var(--color-bg) 55%, var(--color-surface));
 }
 
 /* 图片 */

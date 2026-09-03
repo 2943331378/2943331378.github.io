@@ -5,6 +5,8 @@ import path from "node:path";
 import { PORT } from "./config.js";
 import articlesRoutes from "./routes/articles.routes.js";
 import homeRoutes from "./routes/home.routes.js";
+import archiveRoutes from "./routes/archive.routes.js";
+import adminRoutes from "./routes/admin.routes.js";
 
 const app = express();
 
@@ -15,6 +17,8 @@ app.use(express.json());
 // 路由
 app.use("/api/articles", articlesRoutes);
 app.use("/api/home", homeRoutes);
+app.use("/api/archive", archiveRoutes);
+app.use("/api/admin", adminRoutes);
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok" });
 });

@@ -34,7 +34,7 @@
 
 .detail-tag:hover {
   background: color-mix(in srgb, var(--color-accent-soft) 60%, var(--color-accent) 40%);
-  color: #fff;
+  color: var(--color-on-accent);
 }
 
 .detail-title {
@@ -175,3 +175,4 @@
     text-align: left;
   }
 }
+/* ===== 代码块复制按钮样式见 markdown.css（服务端渲染进 prose HTML，全局生效） ===== */

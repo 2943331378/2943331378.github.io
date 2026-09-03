@@ -1,5 +1,6 @@
 import { Link, NavLink } from "react-router-dom";
 import { NAV_LINKS, PROFILE } from "../data/profile.js";
+import ThemeToggle from "./ThemeToggle.jsx";
 import "./header.css";
 
 export default function Header() {
@@ -11,20 +12,23 @@ export default function Header() {
           <span className="logo-dot">.</span>
         </Link>
 
-        <nav className="nav" aria-label="主导航">
-          {NAV_LINKS.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.to === "/"}
-              className={({ isActive }) =>
-                `nav-link hover-underline${isActive ? " active" : ""}`
-              }
-            >
-              {item.label}
-            </NavLink>
-          ))}
-        </nav>
+        <div className="header-right">
+          <nav className="nav" aria-label="主导航">
+            {NAV_LINKS.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.to === "/"}
+                className={({ isActive }) =>
+                  `nav-link hover-underline${isActive ? " active" : ""}`
+                }
+              >
+                {item.label}
+              </NavLink>
+            ))}
+          </nav>
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   );

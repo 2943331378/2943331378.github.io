@@ -5,6 +5,8 @@ import ScrollToTop from "./components/ScrollToTop.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import ArticleListPage from "./pages/ArticleListPage.jsx";
 import ArticleDetailPage from "./pages/ArticleDetailPage.jsx";
+import ArchivePage from "./pages/ArchivePage.jsx";
+import AdminPage from "./pages/AdminPage.jsx";
 import NotFoundPage from "./pages/NotFoundPage.jsx";
 
 export default function App() {
@@ -17,6 +19,8 @@ export default function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/articles" element={<ArticleListPage />} />
           <Route path="/articles/:slug" element={<ArticleDetailPage />} />
+          <Route path="/archive" element={<ArchivePage />} />
+          <Route path="/admin" element={<AdminPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>

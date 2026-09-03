@@ -1,0 +1,368 @@
+/* ===== 写作台 /admin ===== */
+
+.admin-page {
+  padding: 48px var(--gutter) 96px;
+  min-height: calc(100vh - var(--header-h));
+}
+
+.admin-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.admin-title {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-ink);
+  line-height: 1.25;
+}
+
+.admin-head-actions {
+  display: flex;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.admin-head-actions .btn {
+  padding: 9px 20px;
+  font-size: 0.9rem;
+}
+
+/* 轻提示 */
+.admin-toast {
+  margin-bottom: 20px;
+  padding: 10px 16px;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  border: 1px solid;
+}
+
+.admin-toast.is-ok {
+  color: #15803d;
+  border-color: #bbf7d0;
+  background: #f0fdf4;
+}
+
+.admin-toast.is-err {
+  color: #b91c1c;
+  border-color: #fecaca;
+  background: #fef2f2;
+}
+
+/* ===== 布局：左列表 + 右编辑器 ===== */
+.admin-layout {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 32px;
+  align-items: start;
+}
+
+/* 左侧列表 */
+.admin-sidebar {
+  position: sticky;
+  top: calc(var(--header-h) + 24px);
+  max-height: calc(100vh - var(--header-h) - 48px);
+  overflow-y: auto;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+}
+
+.admin-side-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  letter-spacing: 0.06em;
+  margin-bottom: 14px;
+}
+
+.admin-loading,
+.admin-list-error {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.admin-list-error {
+  color: #b91c1c;
+}
+
+.admin-item {
+  display: flex;
+  align-items: stretch;
+  border-radius: var(--radius-md);
+  transition: background var(--dur) var(--ease);
+}
+
+.admin-item:hover {
+  background: var(--color-accent-soft);
+}
+
+.admin-item.is-active {
+  background: var(--color-accent-soft);
+}
+
+.admin-item-btn {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+  padding: 9px 10px;
+  display: grid;
+  gap: 2px;
+}
+
+.admin-item-title {
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--color-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-star {
+  color: var(--color-accent-warm);
+  margin-right: 4px;
+  font-size: 0.8rem;
+}
+
+.admin-item-meta {
+  font-size: 0.75rem;
+  color: var(--color-text-faint);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-item-del {
+  padding: 0 10px;
+  color: var(--color-text-faint);
+  font-size: 0.8rem;
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+
+.admin-item:hover .admin-item-del {
+  opacity: 1;
+}
+
+.admin-item-del:hover {
+  color: #b91c1c;
+}
+
+/* ===== 右侧编辑器 ===== */
+.admin-editor {
+  display: grid;
+  gap: 24px;
+}
+
+.admin-fields {
+  display: grid;
+  gap: 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
+
+.admin-field-row {
+  display: flex;
+  gap: 16px;
+}
+
+.admin-field {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.admin-field-grow {
+  flex: 1;
+}
+
+.admin-field span {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.admin-field input,
+.admin-login input {
+  padding: 9px 12px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  font: inherit;
+  font-size: 0.92rem;
+  color: var(--color-ink);
+  background: var(--color-bg);
+  transition: border-color var(--dur) var(--ease);
+  width: 100%;
+}
+
+.admin-field input:focus,
+.admin-login input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.admin-field input:disabled {
+  color: var(--color-text-faint);
+  background: var(--color-code-bg);
+  cursor: not-allowed;
+}
+
+.admin-featured {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.admin-featured input {
+  accent-color: var(--color-accent);
+  width: 15px;
+  height: 15px;
+}
+
+/* 正文 + 预览：左右两列，等高对齐 */
+.admin-workbench {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: stretch;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
+
+.admin-work-col {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.admin-md-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  margin-bottom: 8px;
+  display: block;
+}
+
+.admin-md-input {
+  width: 100%;
+  flex: 1;
+  min-height: 480px;
+  resize: vertical;
+  padding: 14px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  line-height: 1.7;
+  color: var(--color-ink);
+  background: var(--color-code-bg);
+}
+
+.admin-md-input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.admin-preview-body {
+  flex: 1;
+  min-height: 480px;
+  max-height: 640px;
+  overflow-y: auto;
+  padding: 16px;
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+}
+
+/* 保存区 */
+.admin-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.admin-hint {
+  font-size: 0.85rem;
+  color: var(--color-text-faint);
+}
+
+/* ===== 登录视图 ===== */
+.admin-login-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 96px var(--gutter);
+  min-height: calc(100vh - var(--header-h) - 200px);
+}
+
+.admin-login {
+  display: grid;
+  gap: 14px;
+  justify-items: start;
+  width: 100%;
+  max-width: 380px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 40px 36px;
+  align-self: center;
+}
+
+.admin-login-hint {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.admin-login-error {
+  font-size: 0.88rem;
+  color: #b91c1c;
+}
+
+.admin-login .btn {
+  justify-self: stretch;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+/* ===== 响应式 ===== */
+@media (max-width: 1024px) {
+  .admin-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-sidebar {
+    position: static;
+    max-height: 280px;
+  }
+
+  .admin-workbench {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-md-input {
+    min-height: 320px;
+  }
+
+  .admin-preview-body {
+    min-height: 200px;
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-field-row {
+    flex-direction: column;
+  }
+}

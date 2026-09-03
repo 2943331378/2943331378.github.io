@@ -16,6 +16,10 @@
   --color-accent-warm: #b45309;  /* 点缀：featured 徽标 */
   --color-code-bg: #f6f5f2;
   --color-code-border: #eceae6;
+  --color-skeleton: #f1efeb;
+  --color-code-inline: #9a3412;  /* 行内代码文字 */
+  --color-on-accent: #ffffff;    /* 强调色背景上的文字 */
+  --color-on-ink: #ffffff;       /* 墨色背景上的文字（按钮） */
 
   /* 阴影 */
   --shadow-card: 0 1px 2px rgb(24 24 27 / 4%), 0 8px 24px rgb(24 24 27 / 6%);
@@ -41,4 +45,30 @@
   /* 过渡 */
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --dur: 0.25s;
+}
+
+/* ===== 暗色主题：跟随 html[data-theme="dark"] ===== */
+
+[data-theme="dark"] {
+  --color-bg: #131316;           /* 深炭底 */
+  --color-surface: #1b1b1f;      /* 卡片面 */
+  --color-ink: #f4f4f5;          /* 标题 */
+  --color-text: #c9c9ce;         /* 正文 */
+  --color-text-muted: #9a9aa1;   /* 次要文字 */
+  --color-text-faint: #67676e;   /* 日期/占位 */
+  --color-border: #2a2a2f;
+  --color-border-strong: #3a3a41;
+  --color-accent: #7aa2f7;       /* 亮蓝：暗底下更醒目 */
+  --color-accent-hover: #93b3f9;
+  --color-accent-soft: #23283a;  /* 标签底/hover 水洗 */
+  --color-accent-warm: #e0a35c;  /* featured 徽标 */
+  --color-code-bg: #19191d;
+  --color-code-border: #2a2a2f;
+  --color-skeleton: #232327;
+  --color-code-inline: #e2a571;
+  --color-on-accent: #10131a;    /* 亮蓝底上用深字 */
+  --color-on-ink: #131316;       /* 浅墨底按钮上用深字 */
+
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 30%), 0 8px 24px rgb(0 0 0 / 35%);
+  --shadow-float: 0 4px 12px rgb(0 0 0 / 40%), 0 16px 40px rgb(0 0 0 / 45%);
 }

@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="CodeArt · 宁悦童的技术博客 — Java 后端开发者的成长空间" />
     <title>CodeArt · 宁悦童的技术博客</title>
+    <script>
+      // 首帧前确定主题，避免暗色用户看到白屏闪烁
+      (function () {
+        var saved = localStorage.getItem("codeart_theme");
+        var dark = saved ? saved === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+        if (dark) document.documentElement.dataset.theme = "dark";
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

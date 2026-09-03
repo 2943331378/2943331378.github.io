@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { api } from "../api/client.js";
 import Toc, { useActiveHeading } from "../components/Toc.jsx";
 import { LoadingBlock, ErrorBlock } from "../components/PageState.jsx";
+import { attachCodeCopy } from "../utils/codeCopy.js";
 import { formatDate, readingLabel } from "../utils/format.js";
 import "./article-detail.css";
 
@@ -40,6 +41,12 @@ export default function ArticleDetailPage() {
   }, [article]);
 
   const activeId = useActiveHeading(bodyRef, article?.toc ?? []);
+
+  // 复制按钮点击委托（按钮由服务端渲染进 HTML，不受重渲染影响）
+  useEffect(() => {
+    if (!article || !bodyRef.current) return;
+    return attachCodeCopy(bodyRef.current);
+  }, [article]);
 
   if (error) {
     const is404 = error.status === 404;

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { PROFILE } from "../data/profile.js";
 import "./footer.css";
 
@@ -26,6 +27,9 @@ export default function Footer() {
               GitHub ↗
             </a>
           )}
+          <Link className="footer-link" to="/admin" title="写作台">
+            写作台
+          </Link>
         </div>
       </div>
     </footer>

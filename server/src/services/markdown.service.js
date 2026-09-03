@@ -60,6 +60,11 @@ md.core.ruler.after("inline", "heading-ids-and-toc", (state) => {
 export function renderMarkdown(src) {
   slugger.reset(); // 每次渲染重置 slugger，避免跨文档 id 冲突
   const env = {};
-  const html = md.render(src, env);
+  let html = md.render(src, env);
+  // 复制按钮写进 HTML 本身（React 拥有的 innerHTML 的一部分，重渲染不丢失）
+  html = html.replaceAll(
+    "</pre>",
+    '<button class="code-copy-btn" type="button">复制</button></pre>'
+  );
   return { html, toc: env.toc || [] };
 }

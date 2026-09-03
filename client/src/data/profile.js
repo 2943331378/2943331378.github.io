@@ -20,4 +20,5 @@ export const PROFILE = {
 export const NAV_LINKS = [
   { to: "/", label: "首页" },
   { to: "/articles", label: "文章" },
+  { to: "/archive", label: "归档" },
 ];

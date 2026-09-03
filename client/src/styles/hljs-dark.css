@@ -1,0 +1,62 @@
+/* ===== 暗色主题下的 highlight.js 代码配色（github-dark 色板） =====
+   仅覆盖 token 颜色；代码块背景/边框由 --color-code-* token 控制 */
+
+[data-theme="dark"] .hljs {
+  color: #c9d1d9;
+}
+
+[data-theme="dark"] .hljs-comment,
+[data-theme="dark"] .hljs-quote {
+  color: #8b949e;
+  font-style: italic;
+}
+
+[data-theme="dark"] .hljs-keyword,
+[data-theme="dark"] .hljs-doctag,
+[data-theme="dark"] .hljs-formula {
+  color: #ff7b72;
+}
+
+[data-theme="dark"] .hljs-string,
+[data-theme="dark"] .hljs-regexp,
+[data-theme="dark"] .hljs-addition {
+  color: #a5d6ff;
+}
+
+[data-theme="dark"] .hljs-number,
+[data-theme="dark"] .hljs-literal,
+[data-theme="dark"] .hljs-variable,
+[data-theme="dark"] .hljs-template-variable,
+[data-theme="dark"] .hljs-type,
+[data-theme="dark"] .hljs-selector-class,
+[data-theme="dark"] .hljs-selector-id {
+  color: #79c0ff;
+}
+
+[data-theme="dark"] .hljs-title,
+[data-theme="dark"] .hljs-section,
+[data-theme="dark"] .hljs-name,
+[data-theme="dark"] .hljs-selector-tag {
+  color: #d2a8ff;
+}
+
+[data-theme="dark"] .hljs-attr,
+[data-theme="dark"] .hljs-attribute,
+[data-theme="dark"] .hljs-built_in,
+[data-theme="dark"] .hljs-params,
+[data-theme="dark"] .hljs-symbol {
+  color: #ffa657;
+}
+
+[data-theme="dark"] .hljs-meta,
+[data-theme="dark"] .hljs-deletion {
+  color: #ffa198;
+}
+
+[data-theme="dark"] .hljs-emphasis {
+  font-style: italic;
+}
+
+[data-theme="dark"] .hljs-strong {
+  font-weight: 600;
+}

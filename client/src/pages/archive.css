@@ -1,0 +1,109 @@
+/* ===== 归档页 ===== */
+
+.archive-page {
+  padding-top: 72px;
+  padding-bottom: 96px;
+}
+
+.archive-head {
+  margin-bottom: 48px;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 32px;
+}
+
+.archive-head .eyebrow {
+  display: block;
+  margin-bottom: 12px;
+}
+
+.archive-head .page-title {
+  margin-bottom: 10px;
+}
+
+.archive-empty {
+  padding: 80px 0;
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.archive-groups {
+  display: grid;
+  gap: 56px;
+  max-width: var(--article-width);
+}
+
+.archive-year {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--color-ink);
+  margin-bottom: 20px;
+}
+
+.archive-year-count {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-text-faint);
+}
+
+.archive-list {
+  display: grid;
+  gap: 4px;
+}
+
+.archive-link {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+  padding: 10px 14px;
+  margin: 0 -14px;
+  border-radius: var(--radius-md);
+  transition: background var(--dur) var(--ease);
+}
+
+.archive-link:hover {
+  background: var(--color-accent-soft);
+}
+
+.archive-link:hover .archive-item-title {
+  color: var(--color-accent);
+}
+
+.archive-date {
+  flex-shrink: 0;
+  width: 72px;
+  font-size: 0.85rem;
+  color: var(--color-text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.archive-item-title {
+  font-size: 1rem;
+  color: var(--color-text);
+  transition: color var(--dur) var(--ease);
+}
+
+.archive-star {
+  color: var(--color-accent-warm);
+  margin-right: 6px;
+  font-size: 0.8rem;
+}
+
+@media (max-width: 640px) {
+  .archive-page {
+    padding-top: 40px;
+  }
+
+  .archive-link {
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .archive-date {
+    width: auto;
+  }
+}

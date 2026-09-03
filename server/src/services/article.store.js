@@ -4,20 +4,18 @@ import matter from "gray-matter";
 import { renderMarkdown } from "./markdown.service.js";
 import { CONTENT_DIR, PAGE_SIZE, MAX_PAGE_SIZE, TAGS_LIMIT } from "../config.js";
 
-// 缓存：slug → {meta, html, toc}
+// 缓存：slug → {meta, contentHtml, toc}；dirty 标记内容目录是否变化
 const cache = new Map();
-let lastScanTime = 0;
-let lastFiles = [];
+let dirty = true;
 
-// 监听文件变化，自动失效缓存
+// 监听文件变化，命中后标记脏，下次请求全量重扫
 async function watchContentDir() {
   try {
-    const watcher = fs.promises.watch(CONTENT_DIR, { recursive: true });
+    const watcher = fs.watch(CONTENT_DIR, { recursive: true });
     for await (const { eventType, filename } of watcher) {
       if (filename && filename.endsWith(".md")) {
-        const slug = path.basename(filename, ".md");
-        cache.delete(slug);
-        console.log(`[Cache] Invalidated ${slug} due to file change`);
+        console.log(`[Cache] Invalidated by file change: ${filename}`);
+        dirty = true;
       }
     }
   } catch (error) {
@@ -26,23 +24,23 @@ async function watchContentDir() {
 }
 watchContentDir();
 
+// 手动标记缓存失效（管理后台写文件后调用，兜底 fs.watch 漏事件）
+export function invalidateCache() {
+  dirty = true;
+}
+
 /**
  * 扫描并解析所有文章
  * @returns {Promise<Array<{slug: string, meta: any, contentHtml: string, toc: Array}>}
  */
 async function scanArticles() {
+  // 缓存干净且非空：直接返回，不再读盘
+  if (!dirty && cache.size > 0) {
+    return Array.from(cache.values());
+  }
+
   try {
     const files = await fs.readdir(CONTENT_DIR, { withFileTypes: true });
-    const now = Date.now();
-
-    // 如果文件列表未变，跳过扫描
-    if (now - lastScanTime < 1000 && JSON.stringify(files) === JSON.stringify(lastFiles)) {
-      return Array.from(cache.values());
-    }
-
-    lastScanTime = now;
-    lastFiles = files;
-
     const articles = [];
     for (const file of files) {
       if (!file.isFile() || !file.name.endsWith(".md")) continue;
@@ -89,6 +87,7 @@ async function scanArticles() {
     articles.forEach(article => {
       cache.set(article.slug, article);
     });
+    dirty = false;
 
     return articles;
   } catch (error) {
@@ -127,19 +126,28 @@ function buildTagCounts(articles) {
 }
 
 /**
- * 获取文章列表（支持分页、标签过滤）
- * @param {Object} params - {page, pageSize, tag}
- * @returns {Promise<Object>} - {list, total, page, pageSize, totalPages, tags}
+ * 获取文章列表（支持分页、标签过滤、关键词搜索）
+ * @param {Object} params - {page, pageSize, tag, q}
+ * @returns {Promise<Object>} - {list, total, page, pageSize, totalPages, tags, q}
  */
 export async function getArticles(params = {}) {
-  const { page = 1, pageSize = PAGE_SIZE, tag } = params;
+  const { page = 1, pageSize = PAGE_SIZE, tag, q } = params;
   const articles = await scanArticles();
 
   const tags = buildTagCounts(articles); // 全量标签（不受过滤/分页影响，供筛选栏常驻）
 
   let filtered = articles;
   if (tag) {
-    filtered = articles.filter((article) => article.meta.tags.includes(tag));
+    filtered = filtered.filter((article) => article.meta.tags.includes(tag));
+  }
+  if (q && String(q).trim()) {
+    const kw = String(q).trim().toLowerCase();
+    filtered = filtered.filter(
+      (a) =>
+        a.meta.title.toLowerCase().includes(kw) ||
+        (a.meta.summary || "").toLowerCase().includes(kw) ||
+        a.meta.tags.some((t) => t.toLowerCase().includes(kw))
+    );
   }
 
   const total = filtered.length;
@@ -149,7 +157,7 @@ export async function getArticles(params = {}) {
 
   const list = filtered.slice(startIndex, endIndex).map((article) => article.meta);
 
-  return { list, total, page, pageSize, totalPages, tags };
+  return { list, total, page, pageSize, totalPages, tags, q: q || null };
 }
 
 /**
@@ -175,6 +183,15 @@ export async function getArticle(slug) {
     prev,
     next,
   };
+}
+
+/**
+ * 获取全部文章 meta（管理后台用，不分页）
+ * @returns {Promise<Array>} 按日期降序的 meta 列表
+ */
+export async function getAllMetas() {
+  const articles = await scanArticles();
+  return articles.map((a) => a.meta);
 }
 
 /**
