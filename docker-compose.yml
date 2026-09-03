@@ -1,0 +1,15 @@
+services:
+  blog:
+    build:
+      context: .
+      network: host # 服务器 Docker 默认 bridge 网络 DNS 受限，构建走宿主网络
+      args:
+        NPM_REGISTRY: https://registry.npmmirror.com
+    container_name: codeart-blog
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3040:3001" # 仅本机监听，由宿主 nginx 反代对外
+    env_file:
+      - .env
+    volumes:
+      - ./content/articles:/app/content/articles # 文章持久化，写作台写文件直接落盘
