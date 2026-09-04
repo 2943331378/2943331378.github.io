@@ -12,32 +12,36 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    env:
-      SSH_HOST: ${{ secrets.SSH_HOST }}
     steps:
       - uses: actions/checkout@v4
 
-      - name: 配置 SSH
-        env:
-          SSH_KEY: ${{ secrets.SSH_KEY }}
+      - name: 构建镜像并打包
         run: |
-          mkdir -p ~/.ssh
-          echo "$SSH_KEY" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H "$SSH_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+          docker build --platform linux/amd64 -t codeart-blog:latest .
+          docker save codeart-blog:latest | gzip > blog-image.tgz
+          tar -czf blog-content.tgz content
 
-      - name: 上传源码到服务器
-        run: |
-          rsync -avz --delete \
-            --exclude 'node_modules' \
-            --exclude 'client/dist' \
-            --exclude '.git' \
-            --exclude '.deploy' \
-            --exclude '.env' \
-            -e "ssh -i ~/.ssh/deploy_key" \
-            ./ "root@$SSH_HOST:/www/wwwroot/my-blog/"
+      - name: 上传镜像与文章到服务器
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: root
+          key: ${{ secrets.SSH_KEY }}
+          source: "blog-image.tgz,blog-content.tgz"
+          target: "/tmp/blog-deploy"
+          rm: true
 
-      - name: 重建并重启容器
-        run: |
-          ssh -i ~/.ssh/deploy_key "root@$SSH_HOST" \
-            "cd /www/wwwroot/my-blog && docker compose up -d --build && docker image prune -f"
+      - name: 加载镜像并重建容器
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: root
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /www/wwwroot/my-blog
+            tar -xzf /tmp/blog-deploy/blog-content.tgz
+            gunzip -c /tmp/blog-deploy/blog-image.tgz | docker load
+            docker compose up -d --force-recreate
+            docker image prune -f
+            rm -rf /tmp/blog-deploy
+            curl -sf http://127.0.0.1:3040/api/health

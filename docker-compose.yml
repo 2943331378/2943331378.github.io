@@ -1,10 +1,6 @@
 services:
   blog:
-    build:
-      context: .
-      network: host # 服务器 Docker 默认 bridge 网络 DNS 受限，构建走宿主网络
-      args:
-        NPM_REGISTRY: https://registry.npmmirror.com
+    image: codeart-blog:latest # 本地/CI 构建后 save 传输，服务器不 build
     container_name: codeart-blog
     restart: unless-stopped
     ports:
