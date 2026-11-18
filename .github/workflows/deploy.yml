@@ -19,7 +19,7 @@ jobs:
         run: |
           docker build --platform linux/amd64 -t codeart-blog:latest .
           docker save codeart-blog:latest | gzip > blog-image.tgz
-          tar -czf blog-content.tgz content
+          tar -czf blog-content.tgz content docker-compose.yml
 
       - name: 上传镜像与文章到服务器
         uses: appleboy/scp-action@v1
@@ -44,4 +44,25 @@ jobs:
             docker compose up -d --force-recreate
             docker image prune -f
             rm -rf /tmp/blog-deploy
-            curl -sf http://127.0.0.1:3040/api/health
+
+            echo "--- 容器状态"
+            docker ps --format '{{.Names}} {{.Image}} {{.Status}} {{.Ports}}'
+            echo "--- 容器挂载"
+            docker inspect codeart-blog --format '{{json .Mounts}}'
+            echo "--- 启动日志"
+            docker logs --tail 20 codeart-blog || true
+
+            echo "--- 健康检查（最多等 60 秒）"
+            ok=0
+            for i in $(seq 1 30); do
+              if curl -fsS http://127.0.0.1:3040/api/health; then echo; ok=1; break; fi
+              sleep 2
+            done
+            if [ "$ok" != "1" ]; then
+              echo "健康检查超时"
+              docker logs --tail 60 codeart-blog
+              exit 1
+            fi
+
+            echo "--- 线上 bundle"
+            curl -s http://127.0.0.1:3040/ | grep -o 'assets/index-[A-Za-z0-9_-]*\.js' || true
