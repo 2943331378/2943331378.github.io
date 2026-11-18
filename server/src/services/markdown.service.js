@@ -21,6 +21,34 @@ const md = new MarkdownIt({
   },
 });
 
+// 自定义 fence：```embed 渲染成站内 iframe。只接受 / 开头的站内路径，避免嵌任意外链
+const defaultFence = md.renderer.rules.fence;
+md.renderer.rules.fence = (tokens, idx, options, env, self) => {
+  const token = tokens[idx];
+  const info = token.info.trim();
+  if (!info.startsWith("embed")) {
+    return defaultFence(tokens, idx, options, env, self);
+  }
+
+  const [srcLine = "", titleLine = ""] = token.content.trim().split("\n");
+  const [infoSrc = "", ...infoTitle] = info.slice("embed".length).trim().split(/\s+/);
+  const src = infoSrc || srcLine.trim();
+  if (!/^\/[A-Za-z0-9._~\-/]*$/.test(src)) {
+    return '<p class="embed-invalid">嵌入地址必须是以 / 开头的站内路径</p>\n';
+  }
+
+  const title = md.utils.escapeHtml(
+    infoTitle.join(" ").trim() || titleLine.trim() || "嵌入式演示"
+  );
+  return (
+    '<div class="embed-frame">' +
+    `<div class="embed-bar"><span>${title}</span>` +
+    `<a href="${src}" target="_blank" rel="noopener noreferrer">全屏打开 ↗</a></div>` +
+    `<iframe src="${src}" title="${title}" loading="lazy" allow="fullscreen"></iframe>` +
+    "</div>\n"
+  );
+};
+
 // 自定义 heading 插件：在 token 流上注入 id 并收集 TOC（core rule，不改 renderer）
 md.core.ruler.after("inline", "heading-ids-and-toc", (state) => {
   const toc = [];
